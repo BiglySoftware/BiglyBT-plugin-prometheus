@@ -28,7 +28,7 @@ PrometheusPlugin
 	extends WebPlugin
 	implements UnloadablePlugin
 {
-    public static final int DEFAULT_PORT    = 9093;
+    public static final int DEFAULT_PORT    = 9089;
 
     private static Properties defaults = new Properties();
 
@@ -94,7 +94,7 @@ PrometheusPlugin
 				
 			String	url_path = url.getPath();
 			
-			if ( url_path.equals( "/" )){
+			if ( url_path.equals( "/" ) || url_path.equals( "/metrics" )){
 				
 					// https://prometheus.io/docs/instrumenting/exposition_formats/
 				
@@ -116,13 +116,13 @@ PrometheusPlugin
 					
 					if ( val instanceof Number ){
 					
-						pw.println( key.replace( ".", "_" ) + " " + val );
+						pw.print( "biglybt_" + key.replace( ".", "_" ) + " " + val + "\n");
 					}
 				}
 				
 				pw.flush();
 				
-				response.setContentType( "text/html; charset=UTF-8" );
+				response.setContentType( "text/plain; charset=UTF-8" );
 				
 				response.setGZIP( true );
 				
